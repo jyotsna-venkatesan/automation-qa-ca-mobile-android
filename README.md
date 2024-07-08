@@ -5,9 +5,7 @@
 
 ## Notes before running
 1. Ensure that the driver app does not have access to the location of the user
-2. Ensure that the email that you are using to log in to the CA is a new email
-3. Ensure that the driver app does not have any ongoing orders
-4. Ensure that you have logged out of the driver app before starting the test
+2. Ensure that you have logged into the driver app before starting the test
 
 ## What does this do so far
 1. Opens the 'Stag-GoGoX' application on Android 
@@ -16,6 +14,7 @@
    2. Places a transport order
    3. Opens the driver app
    4. Picks up the order and completes it
+   5. Cancels order from the CA if wanted
 3. Generates an extent report
 
 ## Project Structure Explanation 
