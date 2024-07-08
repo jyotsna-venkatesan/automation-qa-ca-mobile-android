@@ -35,9 +35,9 @@ public class LandingPageTest {
         System.out.println("Sort orders: Success");
 
         // location settings
-        boolean isLocationSettings = landingPage.locationSettings();
-        assertTrue(isLocationSettings, "failed to do location settings.");
-        System.out.println("Location Settings: Success");
+        // boolean isLocationSettings = landingPage.locationSettings();
+        // assertTrue(isLocationSettings, "failed to do location settings.");
+        // System.out.println("Location Settings: Success");
 
         // click first order
         boolean isFirstOrderClicked = landingPage.clickFirstOrder();

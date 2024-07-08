@@ -26,6 +26,7 @@ public class BaseTestClass {
 
     private static final Logger logger = LogManager.getLogger(BaseTestClass.class);
     static AndroidDriver driver;
+    private ConfigLoader configLoader;
     private static final String EXCEL_FILE_PATH = "src/main/resources/testdata.xlsx";
     private ExtentReports extent;
     private ExtentTest test;
@@ -60,8 +61,8 @@ public class BaseTestClass {
         Map<String, String> testData = ExcelReader.getTestData(EXCEL_FILE_PATH, rowNumber);
         ConfigUpdater.updateConfig(testData);
 
-        // Reload the properties after updating
-        ConfigLoader configLoader = new ConfigLoader();
+        // Initialize the class-level configLoader
+        configLoader = new ConfigLoader();
         configLoader.reload();
 
         // Create a new test node in the report
@@ -71,6 +72,7 @@ public class BaseTestClass {
     private void updateConfig(Map<String, String> testData) {
         ConfigUpdater.updateConfig(testData);
     }
+
 
     @Test(dataProvider = "testData")
     public void runTests(Map<String, String> testData) throws MalformedURLException {
@@ -82,17 +84,46 @@ public class BaseTestClass {
 
         try {
             // Execute tests in sequence for the given testData
+            System.out.println("Starting testHomePage");
             testHomePage(testData);
+            System.out.println("Completed testHomePage");
+
+            System.out.println("Starting testSideBarPage");
             testSideBarPage(testData);
+            System.out.println("Completed testSideBarPage");
+
+            System.out.println("Starting testLoginPage");
             testLoginPage(testData);
+            System.out.println("Completed testLoginPage");
+
+            System.out.println("Starting testAddressPage");
             testAddressPage(testData);
+            System.out.println("Completed testAddressPage");
+
+            System.out.println("Starting testTimeAndVehiclePage");
             testTimeAndVehiclePage(testData);
+            System.out.println("Completed testTimeAndVehiclePage");
+
+            System.out.println("Starting testOrderDetailsPage");
             testOrderDetailsPage(testData);
+            System.out.println("Completed testOrderDetailsPage");
+
+            System.out.println("Starting testOrderSummaryPage");
             testOrderSummaryPage(testData);
-            testPlacedOrderPage(testData);
-            // **Run tests from org.DATests.pageObjects.android.tests.BaseTestClass**
-            DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
-            daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID);
+            System.out.println("Completed testOrderSummaryPage");
+
+            System.out.println("Starting testPlacedOrderPage");
+            Thread.sleep(5000);
+            testPlacedOrderPage(testData);  // Ensure this method is called
+            System.out.println("Completed testPlacedOrderPage");
+
+            // Check the Cancel_Flag before running DA tests
+            String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
+            if (cancelFlag.equals("false")) {
+                // Run tests from org.DATests.pageObjects.android.tests.BaseTestClass
+                DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
+                daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID);
+            }
 
             // Mark the test as passed
             test.pass("Test passed successfully!");
@@ -116,6 +147,7 @@ public class BaseTestClass {
         cap.setCapability("appium:automationName", "uiAutomator2");
         cap.setCapability("appium:appPackage", "hk.gogovan.GoGoVanClient2.staging");
         cap.setCapability("appium:appActivity", "hk.gogovan.clientapp.RootActivity");
+
 
         URL url = new URL("http://127.0.0.1:4723/");
         driver = new AndroidDriver(url, cap);

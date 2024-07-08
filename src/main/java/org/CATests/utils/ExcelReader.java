@@ -83,11 +83,29 @@ public class ExcelReader {
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0);
-            return sheet.getLastRowNum();
+            int lastRowNum = sheet.getLastRowNum();
+            int nonEmptyRowCount = 0;
+
+            for (int i = 1; i <= lastRowNum; i++) { // Assuming first row is header
+                Row row = sheet.getRow(i);
+                if (row != null && row.getPhysicalNumberOfCells() > 0 && !isRowEmpty(row)) {
+                    nonEmptyRowCount++;
+                }
+            }
+            return nonEmptyRowCount;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    private static boolean isRowEmpty(Row row) {
+        for (Cell cell : row) {
+            if (cell.getCellType() != CellType.BLANK) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void writeDataToProperties(String excelFilePath, int rowNumber) {

@@ -25,7 +25,7 @@ public class HomePage extends AbstractPageClass {
 
     // buttons:
     // transport page button, in case if it is not opened already
-    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"com.android.permissioncontroller:id/permission_allow_button\"]")
+    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"com.android.permissioncontroller:id/permission_deny_button\"]")
     private WebElement buttonNotifications;
 
     // methods:

@@ -145,6 +145,7 @@ public class OrderSummaryPage extends AbstractPageClass{
             WebElement buttonAccountAndPaymentMethodsVisible = waitForVisibility(buttonAccountAndPaymentMethods);
             buttonAccountAndPaymentMethodsVisible.click();
             String paymentMethod = configLoader.getProperty("PAYMENT_METHOD");
+            String accountType = configLoader.getProperty("EMAIL_OR_PHONENUMBER");
             if(paymentMethod.equals("Cash")){
                 WebElement buttonCashVisible = waitForVisibility(buttonCash);
                 buttonCashVisible.click();
@@ -160,7 +161,13 @@ public class OrderSummaryPage extends AbstractPageClass{
             else if(paymentMethod.equals("Wallet")){
                 WebElement buttonWalletVisible = waitForVisibility(buttonWallet);
                 buttonWalletVisible.click();
+            } else if(paymentMethod.equals("Card")){
+                if(accountType.equals("qadmaster1@gogotech.hk")){
+                    WebElement buttonCashVisible = waitForVisibility(buttonCash);
+                    buttonCashVisible.click();
+                }
             }
+
 
             Thread.sleep(3000);
 

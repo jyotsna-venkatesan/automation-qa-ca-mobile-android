@@ -1,11 +1,13 @@
 package org.CATests.pageObjects.android.transport;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import org.CATests.pageObjects.android.AbstractPageClass;
 import org.CATests.utils.ConfigLoader;
 import org.CATests.utils.GlobalState;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,13 +16,16 @@ public class PlacedOrderPage extends AbstractPageClass {
 
     // call the configloader to get the values we want to input
     private ConfigLoader configLoader;
+
     private WebElement buttonOrderID;
 
     // set up the driver for this page
     public PlacedOrderPage(AndroidDriver driver) {
         super(driver);
+        System.out.println("Inside the placed order page below super");
+        configLoader = new ConfigLoader();
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-        this.configLoader = new ConfigLoader();
+        System.out.println("leaving the function");
     }
 
 // buttons:
@@ -33,11 +38,21 @@ public class PlacedOrderPage extends AbstractPageClass {
     @AndroidFindBy(xpath = "//android.widget.TextView[@content-desc=\"ggv__order__bottom_panel__order_detail__text__order_id\"]")
     private WebElement buttonOrderIDLocator;
 
+    // credit card got it button
+    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/primaryButton\"]")
+    private WebElement buttonCreditCardGotIt;
+
+    // cancel order button
+    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/primaryButton\"]")
+    private WebElement buttonCancelOrder;
+
 
     // functions:
 // expand order details
     public boolean expandOrderDetails() {
         try {
+            // Assuming buttonOK and buttonExit are already defined as WebElement
+            boolean clickbuttonCreditCardGotIt = clickIfVisible(buttonCreditCardGotIt, 10);
             WebElement buttonOrderDetailsExpandVisible = waitForVisibility(buttonOrderDetailsExpand);
             buttonOrderDetailsExpandVisible.click();
             return true;
@@ -77,4 +92,29 @@ public class PlacedOrderPage extends AbstractPageClass {
             return null;
         }
     }
+
+    public boolean cancelOrder() {
+        try {
+            String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
+            if(cancelFlag.equals("false")){
+                System.out.println("Don't need to cancel the order");
+                return true;
+            }
+            else{
+                System.out.println("Cancel order is true");
+                driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(new UiSelector().text(\""+"Cancel order"+"\"));"));
+                System.out.println("Scrolling down");
+                Thread.sleep(5000);
+                driver.findElement(By.xpath("//*[contains(@text,'Cancel order')]")).click();
+                WebElement buttonCancelOrderVisible = waitForVisibility(buttonCancelOrder);
+                buttonCancelOrderVisible.click();
+                Thread.sleep(5000);
+            }
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error canceling order: " + e.getMessage());
+            return false;
+        }
+    }
+
 }

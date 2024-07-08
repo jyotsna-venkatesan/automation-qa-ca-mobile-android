@@ -28,6 +28,10 @@ public class AddressPage extends AbstractPageClass {
     @AndroidFindBy(xpath = "//android.widget.LinearLayout[@content-desc=\"route_item_1\"]/android.widget.LinearLayout")
     private WebElement buttonFirstOption;
 
+    // first option to show up if already used this location before
+    @AndroidFindBy(xpath = "(//android.widget.LinearLayout[@content-desc=\"route_item_2\"])[2]")
+    private WebElement buttonFirstOptionUsed;
+
     // the done button for where from
     @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/rightTextButton\"]")
     private WebElement buttonDoneWhereFrom;
@@ -85,8 +89,10 @@ public class AddressPage extends AbstractPageClass {
     public boolean clickFirstOption() {
         try {
             Thread.sleep(3000);
-            WebElement buttonFirstOptionVisible = waitForVisibility(buttonFirstOption);
-            buttonFirstOptionVisible.click();
+            boolean clickFirstOptionUsed = clickIfVisible(buttonFirstOptionUsed, 10);
+            if (!clickFirstOptionUsed) {
+                buttonFirstOption.click();
+            }
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking the first option " + e.getMessage());
@@ -121,16 +127,12 @@ public class AddressPage extends AbstractPageClass {
     // enter address for where from
     public boolean enterAddressFrom() {
         try {
-            Thread.sleep(3000);
             System.out.println("looking for input bar for address for where from");
             WebElement buttonInputVisible = waitForVisibility(buttonInput);
             System.out.println("found it!");
             String fromAddress = configLoader.getProperty("FROM_ADDRESS");
             buttonInput.sendKeys(fromAddress);
             System.out.println("send keys into input bar for address for where from");
-            // press the enter button
-            Actions actions = new Actions(driver);
-            actions.sendKeys(buttonInput, Keys.RETURN).perform();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,9 +160,6 @@ public class AddressPage extends AbstractPageClass {
             buttonInputVisible.click();
             String toAddress = configLoader.getProperty("TO_ADDRESS");
             buttonInput.sendKeys(toAddress);
-            // press the enter button
-            Actions actions = new Actions(driver);
-            actions.sendKeys(buttonInput, Keys.RETURN).perform();
             return true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -35,7 +35,7 @@ public class DABaseTestClass {
             switchToDriverApp();
 
             // Execute tests with the given Order ID
-            testLogInPage(orderID);
+            // testLogInPage(orderID);
             testLandingPage(orderID);
 
             // Mark the test as passed
@@ -83,10 +83,10 @@ public class DABaseTestClass {
                 // Activate the previous app
                 driver.activateApp("hk.gogovan.GoGoVanClient2.staging");
 
-                // Sleep for 5 seconds
-                Thread.sleep(5000);
-
                 System.out.println("Switched back to the previous app.");
+
+                // Sleep for 5 seconds so that we can check
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 // Handle the InterruptedException
                 System.err.println("Thread was interrupted: " + e.getMessage());

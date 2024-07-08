@@ -23,6 +23,8 @@ public class PlacedOrderPageTest {
     @Test
     public void testAutomateThePlacedOrderPage() {
 
+        System.out.println("Inside the placed order page test ");
+
         PlacedOrderPage placedOrderPage = new PlacedOrderPage(driver);
 
         System.out.println("-- Placed order Page --");
@@ -30,6 +32,7 @@ public class PlacedOrderPageTest {
         // click on the date and time button
         boolean isOrderDetailsExpanded = placedOrderPage.expandOrderDetails();
         assertTrue(isOrderDetailsExpanded, "Failed to expand order details.");
+        System.out.println("Expanded the order details");
 
         // get order ID
         boolean isGetOrderID = placedOrderPage.getOrderID();
@@ -44,6 +47,11 @@ public class PlacedOrderPageTest {
             // Handle the case where the Order ID could not be extracted
             System.out.println("Failed to extract Order ID");
         }
+
+        // cancel order if needed
+        boolean isOrderCanceled = placedOrderPage.cancelOrder();
+        assertTrue(isOrderCanceled, "Failed to cancel order.");
+        System.out.println("Canceled the order");
 
 
     }

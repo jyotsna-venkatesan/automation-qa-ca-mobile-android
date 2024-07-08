@@ -111,9 +111,6 @@ public class LandingPage extends AbstractPageClass{
         try {
             WebElement buttonOrdersVisible = waitForVisibility(buttonOrders);
             buttonOrdersVisible.click();
-            buttonOrdersVisible.click();
-            buttonOrdersVisible.click();
-            buttonOrdersVisible.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error opening orders page: " + e.getMessage());
@@ -193,7 +190,6 @@ public class LandingPage extends AbstractPageClass{
         try {
             Thread.sleep(15000); // wait for order to confirm pickup
             WebElement buttonBeginDrivingVisible = waitForVisibility(buttonBeginDriving);
-            buttonBeginDrivingVisible.click();
             buttonBeginDrivingVisible.click();
             System.out.println("started driving");
             WebElement buttonArrivedPickUpVisible = waitForVisibility(buttonArrivedPickupPoint);

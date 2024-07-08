@@ -8,7 +8,7 @@ import java.util.Properties;
 public class ConfigLoader {
     private Properties properties = new Properties();
     private static final String CONFIG_FILE_PATH = "src/main/resources/config.properties";
-
+    private static ConfigLoader instance;
     public ConfigLoader() {
         reload();
     }
@@ -19,6 +19,13 @@ public class ConfigLoader {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ConfigLoader getInstance() {
+        if (instance == null) {
+            instance = new ConfigLoader();
+        }
+        return instance;
     }
 
     public String getProperty(String key) {

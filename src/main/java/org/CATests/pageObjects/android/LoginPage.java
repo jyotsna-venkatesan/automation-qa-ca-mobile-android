@@ -120,6 +120,8 @@ public class LoginPage extends AbstractPageClass{
             // press the enter button
             Actions actions = new Actions(driver);
             actions.sendKeys(buttonInputUsername, Keys.RETURN).perform();
+            // Assuming buttonOK and buttonExit are already defined as WebElement
+            boolean clickedOK = clickIfVisible(buttonOK, 5);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +144,6 @@ public class LoginPage extends AbstractPageClass{
     // click ok on popup
     public boolean clickOK() {
         try {
-            Thread.sleep(10000);
             WebElement buttonOKVisible = waitForVisibility(buttonOK);
             buttonOKVisible.click();
             return true;
@@ -155,7 +156,6 @@ public class LoginPage extends AbstractPageClass{
     // click exit
     public boolean clickExit() {
         try {
-            Thread.sleep(4000); // because theres the test popup and the code is trying to proceed before i can close that
             WebElement buttonExitVisible = waitForVisibility(buttonExit);
             buttonExitVisible.click();
             return true;
