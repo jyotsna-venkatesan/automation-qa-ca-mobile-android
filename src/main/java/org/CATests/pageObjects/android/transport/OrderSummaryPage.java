@@ -124,7 +124,7 @@ public class OrderSummaryPage extends AbstractPageClass{
         }
     }
 
-    // function to select the tip
+    // function to apply coupon
     public boolean applyCoupon() {
         try {
             String couponFlag = configLoader.getProperty("COUPON");

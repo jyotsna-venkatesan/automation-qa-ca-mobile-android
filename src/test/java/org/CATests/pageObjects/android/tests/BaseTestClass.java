@@ -1,6 +1,7 @@
 package org.CATests.pageObjects.android.tests;
 
 import io.appium.java_client.android.AndroidDriver;
+import org.CATests.pageObjects.android.tests.delivery.*;
 import org.CATests.pageObjects.android.tests.transport.*;
 import org.CATests.utils.*;
 import org.DATests.pageObjects.android.tests.DABaseTestClass;
@@ -19,7 +20,6 @@ import com.aventstack.extentreports.ExtentTest;
 // testNG imports
 import org.testng.annotations.*;
 
-// import the pages to automate it
 
 
 public class BaseTestClass {
@@ -31,6 +31,8 @@ public class BaseTestClass {
     private ExtentReports extent;
     private ExtentTest test;
     public static String globalOrderID;
+
+    public static String globalPickUpCode;
 
     @BeforeSuite
     public void setUpExtent() {
@@ -76,6 +78,7 @@ public class BaseTestClass {
 
     @Test(dataProvider = "testData")
     public void runTests(Map<String, String> testData) throws MalformedURLException {
+
         // Update config with the test data
         updateConfig(testData);
 
@@ -84,53 +87,114 @@ public class BaseTestClass {
 
         try {
 
-            // Execute tests in sequence for the given testData
-            System.out.println("Starting testHomePage");
-            testHomePage(testData);
-            System.out.println("Completed testHomePage");
-
-            System.out.println("Starting testSideBarPage");
-            testSideBarPage(testData);
-            System.out.println("Completed testSideBarPage");
-
-            System.out.println("Starting testLoginPage");
-            testLoginPage(testData);
-            System.out.println("Completed testLoginPage");
-
-            System.out.println("Starting testAddressPage");
-            testAddressPage(testData);
-            System.out.println("Completed testAddressPage");
-
-            System.out.println("Starting testTimeAndVehiclePage");
-            testTimeAndVehiclePage(testData);
-            System.out.println("Completed testTimeAndVehiclePage");
-
-            System.out.println("Starting testOrderDetailsPage");
-            testOrderDetailsPage(testData);
-            System.out.println("Completed testOrderDetailsPage");
-
-            System.out.println("Starting testOrderSummaryPage");
-            testOrderSummaryPage(testData);
-            System.out.println("Completed testOrderSummaryPage");
-
-            System.out.println("Starting testPlacedOrderPage");
-            testPlacedOrderPage(testData);  // Ensure this method is called
-            System.out.println("Completed testPlacedOrderPage");
-
             // Reload properties to ensure the latest value is read
             configLoader.reload();
-            String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
-            System.out.println("The cancel flag is " + cancelFlag);
+            String orderType = configLoader.getProperty("ORDER_TYPE");
+            System.out.println("The type of order is " + orderType);
 
-            // Check the Cancel_Flag before running DA tests
-            if (cancelFlag.equalsIgnoreCase("false")) {
-                // Run tests from org.DATests.pageObjects.android.tests.BaseTestClass
-                DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
-                daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID);
+            if (orderType.equalsIgnoreCase("T")) {
+
+                // Execute tests in sequence for the given testData
+                System.out.println("Starting testHomePage");
+                testHomePage(testData);
+                System.out.println("Completed testHomePage");
+
+                System.out.println("Starting testSideBarPage");
+                testSideBarPage(testData);
+                System.out.println("Completed testSideBarPage");
+
+                System.out.println("Starting testLoginPage");
+                testLoginPage(testData);
+                System.out.println("Completed testLoginPage");
+
+                System.out.println("Starting testAddressPage");
+                testAddressPage(testData);
+                System.out.println("Completed testAddressPage");
+
+                System.out.println("Starting testTimeAndVehiclePage");
+                testTimeAndVehiclePage(testData);
+                System.out.println("Completed testTimeAndVehiclePage");
+
+                System.out.println("Starting testOrderDetailsPage");
+                testOrderDetailsPage(testData);
+                System.out.println("Completed testOrderDetailsPage");
+
+                System.out.println("Starting testOrderSummaryPage");
+                testOrderSummaryPage(testData);
+                System.out.println("Completed testOrderSummaryPage");
+
+                System.out.println("Starting testPlacedOrderPage");
+                testPlacedOrderPage(testData);  // Ensure this method is called
+                System.out.println("Completed testPlacedOrderPage");
+
+                // Reload properties to ensure the latest value is read
+                configLoader.reload();
+                String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
+                System.out.println("The cancel flag is " + cancelFlag);
+
+                // Check the Cancel_Flag before running DA tests
+                if (cancelFlag.equalsIgnoreCase("false")) {
+                    // Run tests from org.DATests.pageObjects.android.tests.BaseTestClass
+                    DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
+                    daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID, GlobalState.globalPickUpCode);
+                }
+
+                // Mark the test as passed
+                test.pass("Test passed successfully!");
+
             }
 
-            // Mark the test as passed
-            test.pass("Test passed successfully!");
+            else if (orderType.equals("D")){
+
+                // Execute tests in sequence for the given testData
+                System.out.println("Starting testHomePage");
+                testHomePage(testData);
+                System.out.println("Completed testHomePage");
+
+                System.out.println("Starting testSideBarPage");
+                testSideBarPage(testData);
+                System.out.println("Completed testSideBarPage");
+
+                System.out.println("Starting testLoginPage");
+                testLoginPage(testData);
+                System.out.println("Completed testLoginPage");
+
+                System.out.println("Starting testPickUpPage");
+                testPickUpPage(testData);
+                System.out.println("Completed testPickUpPage");
+
+                System.out.println("Starting testSendPackagePage");
+                testSendPackagePage(testData);
+                System.out.println("Completed testSendPackagePage");
+
+                System.out.println("Starting testTimePage");
+                testTimePage(testData);
+                System.out.println("Completed testTimePage");
+
+                System.out.println("Starting testPackageInfoPage");
+                testPackageInfoPage(testData);
+                System.out.println("Completed testPackageInfoPage");
+
+                System.out.println("Starting testPlacedOrderDeliveryPage");
+                testPlacedOrderDeliveryPage(testData);
+                System.out.println("Completed testPlacedOrderDeliveryPage");
+
+                // Reload properties to ensure the latest value is read
+                configLoader.reload();
+                String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
+                System.out.println("The cancel flag is " + cancelFlag);
+
+                // Check the Cancel_Flag before running DA tests
+                if (cancelFlag.equalsIgnoreCase("false")) {
+                    // Run tests from org.DATests.pageObjects.android.tests.BaseTestClass
+                    DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
+                    daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID, GlobalState.globalPickUpCode);
+                }
+
+                // Mark the test as passed
+                test.pass("Test passed successfully!");
+
+            }
 
         } catch (Exception e) {
             // Mark the test as failed
@@ -149,7 +213,6 @@ public class BaseTestClass {
         cap.setCapability("appium:platformName", "Android");
         cap.setCapability("appium:platformVersion", "14");
         cap.setCapability("appium:automationName", "uiAutomator2");
-        cap.setCapability("appium:newCommandTimeout", 600); // Set timeout to 600 seconds (10 minutes)
         cap.setCapability("appium:appPackage", "hk.gogovan.GoGoVanClient2.staging");
         cap.setCapability("appium:appActivity", "hk.gogovan.clientapp.RootActivity");
 
@@ -233,6 +296,31 @@ public class BaseTestClass {
     private void testPlacedOrderPage(Map<String, String> testData) {
         PlacedOrderPageTest placedOrderPageTest = new PlacedOrderPageTest(driver);
         placedOrderPageTest.testAutomateThePlacedOrderPage();
+    }
+
+    private void testPickUpPage(Map<String, String> testData) {
+        PickUpPageTest pickUpPageTest = new PickUpPageTest(driver);
+        pickUpPageTest.testAutomateThePickUpPage();
+    }
+
+    private void testSendPackagePage(Map<String, String> testData) {
+        SendPackagePageTest sendPackagePageTest = new SendPackagePageTest(driver);
+        sendPackagePageTest.testAutomateTheSendPackagePage();
+    }
+
+    private void testTimePage(Map<String, String> testData) {
+        TimePageTest timePageTest = new TimePageTest(driver);
+        timePageTest.testAutomateTheTimePage();
+    }
+
+    private void testPackageInfoPage(Map<String, String> testData) {
+        PackageInfoPageTest packageInfoPageTest = new PackageInfoPageTest(driver);
+        packageInfoPageTest.testAutomateThePackageInfoPage();
+    }
+
+    private void testPlacedOrderDeliveryPage(Map<String, String> testData) {
+        PlacedOrderDeliveryPageTest placedOrderDeliveryPageTest = new PlacedOrderDeliveryPageTest(driver);
+        placedOrderDeliveryPageTest.testAutomateThePlacedOrderDeliveryPage();
     }
 
     private void tearDown() {

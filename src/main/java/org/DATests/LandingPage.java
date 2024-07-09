@@ -95,6 +95,12 @@ public class LandingPage extends AbstractPageClass{
     @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/btnCompleteOrder\"]")
     private WebElement buttonCompleteOrder;
 
+    // continue to pick order
+    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/secondaryButton\"]")
+    private WebElement buttonContinueToPickOrder;
+
+
+
 
     // functions:
     // close document expiry popup
@@ -124,19 +130,23 @@ public class LandingPage extends AbstractPageClass{
     // click on first order
     public boolean clickFirstOrder() {
         try {
-            String formattedGlobalOrderID = "#" + globalOrderID;
-            String orderIDXPath = "//android.widget.TextView[@resource-id='hk.gogovan.GoGoDriver.staging:id/order_id_light']";
-            List<WebElement> orderIDElements = driver.findElements(By.xpath(orderIDXPath));
+            // String formattedGlobalOrderID = "#" + globalOrderID;
+            // String orderIDXPath = "//android.widget.TextView[@resource-id='hk.gogovan.GoGoDriver.staging:id/order_id_light']";
+            // List<WebElement> orderIDElements = driver.findElements(By.xpath(orderIDXPath));
 
             // Iterate through the elements to find the matching order ID
-            for (WebElement orderIDElement : orderIDElements) {
-                if (orderIDElement.getText().equals(formattedGlobalOrderID)) {
-                    orderIDElement.click();
-                    WebElement buttonPickFirstOrderVisible = waitForVisibility(buttonPickFirstOrder);
-                    buttonPickFirstOrderVisible.click();
-                    return true;
-                }
-            }
+            // for (WebElement orderIDElement : orderIDElements) {
+                // if (orderIDElement.getText().equals(formattedGlobalOrderID)) {
+                    // orderIDElement.click();
+                    // WebElement buttonPickFirstOrderVisible = waitForVisibility(buttonPickFirstOrder);
+                    // buttonPickFirstOrderVisible.click();
+                    // return true;
+                // }
+            // }
+            WebElement buttonFirstOrderVisible = waitForVisibility(buttonFirstOrder);
+            buttonFirstOrderVisible.click();
+            WebElement buttonPickFirstOrderVisible = waitForVisibility(buttonPickFirstOrder);
+            buttonPickFirstOrderVisible.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking order: " + e.getMessage());
@@ -192,6 +202,7 @@ public class LandingPage extends AbstractPageClass{
             Thread.sleep(15000); // wait for order to confirm pickup
             WebElement buttonBeginDrivingVisible = waitForVisibility(buttonBeginDriving);
             buttonBeginDrivingVisible.click();
+            boolean clickStartDrivingAgain = clickIfVisible(buttonBeginDrivingVisible, 3);
             System.out.println("started driving");
             WebElement buttonArrivedPickUpVisible = waitForVisibility(buttonArrivedPickupPoint);
             buttonArrivedPickUpVisible.click();
@@ -205,6 +216,9 @@ public class LandingPage extends AbstractPageClass{
             WebElement buttonCompleteVisible = waitForVisibility(buttonCompleteOrder);
             buttonCompleteVisible.click();
             System.out.println("completed order");
+            WebElement buttonContinueVisible = waitForVisibility(buttonContinueToPickOrder);
+            buttonContinueVisible.click();
+            System.out.println("continuing to pick order");
 
             return true;
         } catch (Exception e) {

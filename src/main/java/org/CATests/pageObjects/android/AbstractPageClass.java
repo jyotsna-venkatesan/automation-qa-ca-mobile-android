@@ -45,8 +45,30 @@ public class AbstractPageClass {
 
     // wait until a web element is visible
     public WebElement waitForVisibility(WebElement element) {
-        return wait.ignoring(StaleElementReferenceException.class)
-                .until(ExpectedConditions.visibilityOf(element));
+        int retries = 3; // Number of retries
+        int retryDelay = 5000; // Delay between retries in milliseconds
+
+        for (int attempt = 1; attempt <= retries; attempt++) {
+            try {
+                return wait.ignoring(StaleElementReferenceException.class)
+                        .until(ExpectedConditions.visibilityOf(element));
+            } catch (Exception e) {
+                System.out.println("Attempt " + attempt + " failed: " + e.getMessage());
+                if (attempt < retries) {
+                    try {
+                        Thread.sleep(retryDelay); // Wait before retrying
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt(); // Restore interrupt status
+                        System.out.println("Thread was interrupted: " + ie.getMessage());
+                        return null;
+                    }
+                } else {
+                    System.out.println("Element not visible after " + retries + " attempts: " + e.getMessage());
+                    return null;
+                }
+            }
+        }
+        return null;
     }
 
     // Method to check if an element is visible and click it if it is

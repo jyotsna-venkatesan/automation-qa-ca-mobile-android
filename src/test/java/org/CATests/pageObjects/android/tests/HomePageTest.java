@@ -27,8 +27,8 @@ public class HomePageTest {
 
         // click transport button
         boolean isClicked = homePage.clickTransportButton();
-        assertTrue(isClicked, "failed to click on the transport button.");
-        System.out.println("Going to Transport Page: Success");
+        assertTrue(isClicked, "failed to click on the t or d button.");
+        System.out.println("Going to T or D Page: Success");
     }
 
 }

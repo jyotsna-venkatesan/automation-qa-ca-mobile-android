@@ -1,4 +1,4 @@
-package org.CATests.pageObjects.android.transport;
+package org.CATests.pageObjects.android.delivery;
 
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
@@ -8,34 +8,28 @@ import org.CATests.pageObjects.android.AbstractPageClass;
 import org.CATests.utils.ConfigLoader;
 import org.CATests.utils.GlobalState;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
-public class PlacedOrderPage extends AbstractPageClass {
+
+public class PlacedOrderDeliveryPage extends AbstractPageClass {
 
     // call the configloader to get the values we want to input
     private ConfigLoader configLoader;
 
-    private WebElement buttonOrderID;
-
-    // set up the driver for this page
-    public PlacedOrderPage(AndroidDriver driver) {
+    public PlacedOrderDeliveryPage(AndroidDriver driver){
         super(driver);
-        System.out.println("Inside the placed order page below super");
         configLoader = new ConfigLoader();
         PageFactory.initElements(new AppiumFieldDecorator(driver), this);
-        System.out.println("leaving the function");
     }
 
-// buttons:
+    // buttons:
 
     // button to open looking for a driver thing
-    @AndroidFindBy(xpath = "//android.widget.RelativeLayout[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/rl_order_status\"]/android.widget.RelativeLayout/android.widget.LinearLayout")
+    @AndroidFindBy(xpath = "//android.widget.RelativeLayout[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/orderStateHistoryInfoView\"]")
     private WebElement buttonOrderDetailsExpand;
 
     // button with order id
-    @AndroidFindBy(xpath = "//android.widget.TextView[@content-desc=\"ggv__order__bottom_panel__order_detail__text__order_id\"]")
+    @AndroidFindBy(xpath = "//android.widget.TextView[@resource-id=\"hk.gogovan.GoGoVanClient2.staging:id/orderIdTextView\"]")
     private WebElement buttonOrderIDLocator;
 
     // credit card got it button
@@ -52,11 +46,11 @@ public class PlacedOrderPage extends AbstractPageClass {
 
 
     // functions:
-// expand order details
+    // expand order details
     public boolean expandOrderDetails() {
         try {
             // Assuming buttonOK and buttonExit are already defined as WebElement
-            boolean clickbuttonCreditCardGotIt = clickIfVisible(buttonCreditCardGotIt, 8);
+            boolean clickbuttonCreditCardGotIt = clickIfVisible(buttonCreditCardGotIt, 15);
             System.out.println("checked for creditcard");
             WebElement buttonOrderDetailsExpandVisible = waitForVisibility(buttonOrderDetailsExpand);
             buttonOrderDetailsExpandVisible.click();
@@ -73,14 +67,12 @@ public class PlacedOrderPage extends AbstractPageClass {
         try {
             WebElement buttonOrderIDVisible = waitForVisibility(buttonOrderIDLocator);
             // Extract the text from the element
-            String orderText = buttonOrderIDLocator.getText();
-            // Log the extracted text
-            System.out.println("Extracted Text: " + orderText);
-            // Parse the Order ID from the text
-            String orderID = parseOrderID(orderText);
-            // Log the parsed Order ID
-            System.out.println("Parsed Order ID: " + orderID);
-            GlobalState.globalOrderID = orderID;
+            GlobalState.globalOrderID = buttonOrderIDLocator.getText();
+
+            WebElement buttonCodeVisible = waitForVisibility(buttonCode);
+            // Extract the text from the element
+            GlobalState.globalPickUpCode = buttonCode.getText();
+
             return true;
         } catch (Exception e) {
             System.out.println("Error denying notifications: " + e.getMessage());
@@ -121,5 +113,7 @@ public class PlacedOrderPage extends AbstractPageClass {
             return false;
         }
     }
+
+
 
 }

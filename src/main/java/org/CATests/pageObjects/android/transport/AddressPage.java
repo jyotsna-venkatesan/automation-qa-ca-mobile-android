@@ -88,10 +88,13 @@ public class AddressPage extends AbstractPageClass {
     // click on the first option under where from after entering address
     public boolean clickFirstOption() {
         try {
+            Thread.sleep(3000);
             boolean clickFirstOptionUsed = clickIfVisible(buttonFirstOptionUsed, 3);
-            if (!clickFirstOptionUsed) {
-                buttonFirstOption.click();
+            if (clickFirstOptionUsed) {
+                return true;
             }
+            Thread.sleep(3000);
+            buttonFirstOption.click();
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking the first option " + e.getMessage());

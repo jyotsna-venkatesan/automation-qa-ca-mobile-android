@@ -20,9 +20,9 @@ public class LoginPageTest {
         System.out.println("-- Login Process --");
 
         // click on the deny notifications button
-        // boolean isDenyNotificationsButtonClicked = loginPage.denyNotifications();
-        // assertTrue(isDenyNotificationsButtonClicked, "failed to click on the deny notifications.");
-        // System.out.println("Deny notifications: Success");
+        boolean isDenyNotificationsButtonClicked = loginPage.denyNotifications();
+        assertTrue(isDenyNotificationsButtonClicked, "failed to click on the deny notifications.");
+        System.out.println("Deny notifications if needed: Success");
 
         // input the contact number
         boolean isContactNumberEntered = loginPage.enterContactNumber();

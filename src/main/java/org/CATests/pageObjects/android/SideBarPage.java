@@ -29,8 +29,7 @@ public class SideBarPage extends AbstractPageClass{
     // click deny access to device's location
     public boolean clickDeny() {
         try {
-            WebElement buttonDenyVisible = waitForVisibility(buttonDeny);
-            buttonDenyVisible.click();
+            boolean clickbuttonDeny = clickIfVisible(buttonDeny, 3);
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking the where from button: " + e.getMessage());
