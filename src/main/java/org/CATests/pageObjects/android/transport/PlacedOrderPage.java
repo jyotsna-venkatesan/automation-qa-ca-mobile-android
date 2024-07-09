@@ -52,9 +52,11 @@ public class PlacedOrderPage extends AbstractPageClass {
     public boolean expandOrderDetails() {
         try {
             // Assuming buttonOK and buttonExit are already defined as WebElement
-            boolean clickbuttonCreditCardGotIt = clickIfVisible(buttonCreditCardGotIt, 10);
+            boolean clickbuttonCreditCardGotIt = clickIfVisible(buttonCreditCardGotIt, 8);
+            System.out.println("checked for creditcard");
             WebElement buttonOrderDetailsExpandVisible = waitForVisibility(buttonOrderDetailsExpand);
             buttonOrderDetailsExpandVisible.click();
+            System.out.println("expanded order details");
             return true;
         } catch (Exception e) {
             System.out.println("Error denying notifications: " + e.getMessage());
@@ -96,7 +98,7 @@ public class PlacedOrderPage extends AbstractPageClass {
     public boolean cancelOrder() {
         try {
             String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
-            if(cancelFlag.equals("false")){
+            if(cancelFlag.equalsIgnoreCase("false")){
                 System.out.println("Don't need to cancel the order");
                 return true;
             }
@@ -108,7 +110,6 @@ public class PlacedOrderPage extends AbstractPageClass {
                 driver.findElement(By.xpath("//*[contains(@text,'Cancel order')]")).click();
                 WebElement buttonCancelOrderVisible = waitForVisibility(buttonCancelOrder);
                 buttonCancelOrderVisible.click();
-                Thread.sleep(5000);
             }
             return true;
         } catch (Exception e) {

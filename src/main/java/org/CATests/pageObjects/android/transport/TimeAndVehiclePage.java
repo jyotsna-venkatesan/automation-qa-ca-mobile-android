@@ -104,6 +104,10 @@ public class TimeAndVehiclePage extends AbstractPageClass {
     // click on the date and time button
     public boolean clickDateAndTime() {
         try {
+            String selectedTime = configLoader.getProperty("TIME").replaceAll("[^a-zA-Z0-9: ]", "").trim();
+            if ("ASAP".equalsIgnoreCase(selectedTime)) {
+                return true;
+            }
             WebElement buttonDateTimeVisible = waitForVisibility(buttonDateTime);
             buttonDateTimeVisible.click();
             return true;
@@ -116,6 +120,11 @@ public class TimeAndVehiclePage extends AbstractPageClass {
     // select the date
     public boolean clickSelectedDate() {
         try{
+            String selectedTime = configLoader.getProperty("TIME").replaceAll("[^a-zA-Z0-9: ]", "").trim();
+            if ("ASAP".equalsIgnoreCase(selectedTime)) {
+                return true;
+            }
+
             // wait for the dates to show up, i can't find a workaround for this
             Thread.sleep(300);
 
@@ -124,16 +133,16 @@ public class TimeAndVehiclePage extends AbstractPageClass {
             String startDateStr = configLoader.getProperty("CURRENT_DATE");
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
             int currentYear = LocalDate.now().getYear();
-            if (startDateStr.equalsIgnoreCase("Today")) {
+            if (startDateStr.equals("Today")) {
                 startDateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM")) + " " + currentYear;
-            } else if (startDateStr.equalsIgnoreCase("Tomorrow")) {
+            } else if (startDateStr.equals("Tomorrow")) {
                 startDateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd MMM")) + " " + currentYear;
             } else {
                 startDateStr = startDateStr.replaceAll(".*?(\\d{1,2} \\w{3}).*", "$1") + " " + currentYear;
             }
-            if (endDateStr.equalsIgnoreCase("Today")) {
+            if (endDateStr.equals("Today")) {
                 endDateStr = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM")) + " " + currentYear;
-            } else if (endDateStr.equalsIgnoreCase("Tomorrow")) {
+            } else if (endDateStr.equals("Tomorrow")) {
                 endDateStr = LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd MMM")) + " " + currentYear;
             } else {
                 endDateStr = endDateStr.replaceAll(".*?(\\d{1,2} \\w{3}).*", "$1") + " " + currentYear;
@@ -173,7 +182,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
     public boolean clickSelectedTime() {
         try {
             String selectedTime = configLoader.getProperty("TIME").replaceAll("[^a-zA-Z0-9: ]", "").trim();
-            if ("ASAP".equals(selectedTime)) {
+            if ("ASAP".equalsIgnoreCase(selectedTime)) {
                 return true;
             }
 
@@ -191,7 +200,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
                 String timeText = timeElement.getText().replaceAll("[^a-zA-Z0-9: ]", "").trim();
                 timeElement.click();
 
-                if (timeText.equals(selectedTime)) {
+                if (timeText.equalsIgnoreCase(selectedTime)) {
                     // Click again to confirm selection
                     waitForVisibility(timeElement).click();
                     flag = 1;
@@ -207,9 +216,13 @@ public class TimeAndVehiclePage extends AbstractPageClass {
         }
     }
 
-    // click ok for pick-up time
-    public boolean clickOK() {
+    // click ok for pick-up time for the date
+    public boolean clickOKDate() {
         try {
+            String selectedTime = configLoader.getProperty("TIME").replaceAll("[^a-zA-Z0-9: ]", "").trim();
+            if ("ASAP".equalsIgnoreCase(selectedTime)) {
+                return true;
+            }
             buttonOK.click();
             return true;
         } catch (Exception e) {
@@ -218,9 +231,28 @@ public class TimeAndVehiclePage extends AbstractPageClass {
         }
     }
 
+    // click ok for pick-up time for the rental
+    public boolean clickOKRental() {
+        try {
+            String hourlyRentalTime = configLoader.getProperty("HOURLY_RENTAL");
+            if (hourlyRentalTime.equalsIgnoreCase("No hourly rental")) {
+                return true;
+            }
+            buttonOK.click();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error clicking the ok button for rental: " + e.getMessage());
+            return false;
+        }
+    }
+
     // click on the hourly rental button
     public boolean clickHourlyRental() {
         try {
+            String hourlyRentalTime = configLoader.getProperty("HOURLY_RENTAL");
+            if (hourlyRentalTime.equalsIgnoreCase("No hourly rental")) {
+                return true;
+            }
             WebElement buttonHourlyRentalVisible = waitForVisibility(buttonHourlyRentalTime);
             buttonHourlyRentalVisible.click();
             return true;
@@ -234,7 +266,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
     public boolean clickSelectedHourlyRentalTime(){
         try {
             String hourlyRentalTime = configLoader.getProperty("HOURLY_RENTAL");
-            if (hourlyRentalTime.equals("No hourly rental")) {
+            if (hourlyRentalTime.equalsIgnoreCase("No hourly rental")) {
                 return true;
             }
             int flag = 0;
@@ -244,7 +276,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
                     WebElement firstNextHourlyRentalTimeVisible = waitForVisibility(firstNextHourlyRentalTime);
                     String j = firstNextHourlyRentalTimeVisible.getText();
                     firstNextHourlyRentalTimeVisible.click();
-                    if (j.equals(hourlyRentalTime)) {
+                    if (j.equalsIgnoreCase(hourlyRentalTime)) {
                         WebElement firstNextHourlyRentalTimeVisible2 = waitForVisibility(firstNextHourlyRentalTime);
                         firstNextHourlyRentalTimeVisible2.click();
                         flag = 1;
@@ -255,7 +287,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
                     WebElement secondNextHourlyRentalTimeVisible = waitForVisibility(secondNextHourlyRentalTime);
                     String j = secondNextHourlyRentalTimeVisible.getText();
                     secondNextHourlyRentalTimeVisible.click();
-                    if (j.equals(hourlyRentalTime)) {
+                    if (j.equalsIgnoreCase(hourlyRentalTime)) {
                         WebElement secondNextHourlyRentalTimeVisible2 = waitForVisibility(secondNextHourlyRentalTime);
                         secondNextHourlyRentalTimeVisible2.click();
                         flag = 1;
@@ -265,7 +297,7 @@ public class TimeAndVehiclePage extends AbstractPageClass {
                     WebElement nextHourlyRentalTimeIfScrollVisible = waitForVisibility(nextHourlyRentalTimeIfScroll);
                     String j = nextHourlyRentalTimeIfScrollVisible.getText();
                     nextHourlyRentalTimeIfScrollVisible.click();
-                    if (j.equals(hourlyRentalTime)) {
+                    if (j.equalsIgnoreCase(hourlyRentalTime)) {
                         flag = 1;
                         break;
                     }
@@ -287,22 +319,22 @@ public class TimeAndVehiclePage extends AbstractPageClass {
 
         try{
             String vehicleType = configLoader.getProperty("VEHICLE");
-            if (vehicleType.equals("Van")){
+            if (vehicleType.equalsIgnoreCase("Van")){
                 WebElement buttonVanVisible = waitForVisibility(buttonVan);
                 buttonVanVisible.click();
                 return true;
             }
-            else if (vehicleType.equals("Premium Van")){
+            else if (vehicleType.equalsIgnoreCase("Premium Van")){
                 WebElement buttonPremiumVanVisible = waitForVisibility(buttonPremiumVan);
                 buttonPremiumVanVisible.click();
                 return true;
             }
-            else if (vehicleType.equals("5.5t Truck")){
+            else if (vehicleType.equalsIgnoreCase("5.5t Truck")){
                 WebElement button55TruckVisible = waitForVisibility(button55Truck);
                 button55TruckVisible.click();
                 return true;
             }
-            else if (vehicleType.equals("9t Truck")){
+            else if (vehicleType.equalsIgnoreCase("9t Truck")){
                 WebElement button9TruckVisible = waitForVisibility(button9Truck);
                 button9TruckVisible.click();
                 return true;
@@ -322,7 +354,6 @@ public class TimeAndVehiclePage extends AbstractPageClass {
     public boolean clickNext() {
         try {
             WebElement buttonNextVisible = waitForVisibility(buttonNext);
-            System.out.println("going to click next");
             buttonNextVisible.click();
             System.out.println("clicked next");
             return true;

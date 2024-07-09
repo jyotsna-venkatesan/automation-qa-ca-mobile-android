@@ -33,8 +33,7 @@ public class HomePage extends AbstractPageClass {
     // method to click on the button
     public boolean clickAllowNotifications() {
         try {
-            WebElement buttonNotificationsVisible = waitForVisibility(buttonNotifications);
-            buttonNotificationsVisible.click();
+            boolean clickbuttonNotifications = clickIfVisible(buttonNotifications, 3);
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking the notifications button: " + e.getMessage());

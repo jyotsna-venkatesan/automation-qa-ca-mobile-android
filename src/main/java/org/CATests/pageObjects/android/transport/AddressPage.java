@@ -88,8 +88,7 @@ public class AddressPage extends AbstractPageClass {
     // click on the first option under where from after entering address
     public boolean clickFirstOption() {
         try {
-            Thread.sleep(3000);
-            boolean clickFirstOptionUsed = clickIfVisible(buttonFirstOptionUsed, 10);
+            boolean clickFirstOptionUsed = clickIfVisible(buttonFirstOptionUsed, 3);
             if (!clickFirstOptionUsed) {
                 buttonFirstOption.click();
             }
@@ -116,7 +115,6 @@ public class AddressPage extends AbstractPageClass {
     public boolean clickWhereFrom() {
         try {
             buttonWhereFrom.click();
-            Thread.sleep(3000);
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking the where from button: " + e.getMessage());
@@ -127,12 +125,9 @@ public class AddressPage extends AbstractPageClass {
     // enter address for where from
     public boolean enterAddressFrom() {
         try {
-            System.out.println("looking for input bar for address for where from");
             WebElement buttonInputVisible = waitForVisibility(buttonInput);
-            System.out.println("found it!");
             String fromAddress = configLoader.getProperty("FROM_ADDRESS");
             buttonInput.sendKeys(fromAddress);
-            System.out.println("send keys into input bar for address for where from");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +152,6 @@ public class AddressPage extends AbstractPageClass {
     public boolean enterAddressTo() {
         try {
             WebElement buttonInputVisible = waitForVisibility(buttonInput);
-            buttonInputVisible.click();
             String toAddress = configLoader.getProperty("TO_ADDRESS");
             buttonInput.sendKeys(toAddress);
             return true;
@@ -171,7 +165,7 @@ public class AddressPage extends AbstractPageClass {
     public boolean swapAddress(){
         try{
             String swapFlag = configLoader.getProperty("SWAP");
-            if (swapFlag.equals("false")){
+            if (swapFlag.equalsIgnoreCase("false")){
                 return true;
             }
             WebElement buttonSwapVisible = waitForVisibility(buttonSwap);
@@ -187,7 +181,7 @@ public class AddressPage extends AbstractPageClass {
     public boolean addStop() {
         try {
             String stopFlag = configLoader.getProperty("STOP_NEEDED");
-            if (stopFlag.equals("false")){
+            if (stopFlag.equalsIgnoreCase("false")){
                 return true;
             }
             WebElement buttonAddStopVisible = waitForVisibility(buttonAddStop);
@@ -195,12 +189,8 @@ public class AddressPage extends AbstractPageClass {
             WebElement buttonAddStopWhereToVisible = waitForVisibility(buttonAddStopWhereTo);
             buttonAddStopWhereToVisible.click();
             WebElement buttonAddStopInputVisible = waitForVisibility(buttonAddStopInput);
-            buttonAddStopInputVisible.click();
             String stopAddress = configLoader.getProperty("STOP_ADDRESS");
             buttonAddStopInput.sendKeys(stopAddress);
-            // press the enter button
-            Actions actions = new Actions(driver);
-            actions.sendKeys(buttonAddStopInput, Keys.RETURN).perform();
             WebElement buttonFirstOptionAddStopVisible = waitForVisibility(buttonFirstOptionAddStop);
             buttonFirstOptionAddStopVisible.click();
             buttonDoneWhereFrom.click();

@@ -98,23 +98,22 @@ public class OrderSummaryPage extends AbstractPageClass{
     public boolean selectTip() {
         try {
             String tipAmount = configLoader.getProperty("TIP");
-            if(tipAmount.equals("No tip")){
-                WebElement buttonNoTipVisible = waitForVisibility(buttonNoTip);
-                buttonNoTipVisible.click();
+            if(tipAmount.equalsIgnoreCase("No tip")){
+                return true;
             }
-            else if(tipAmount.equals("20")){
+            else if(tipAmount.equalsIgnoreCase("20")){
                 WebElement button20TipVisible = waitForVisibility(button20Tip);
                 button20TipVisible.click();
             }
-            else if(tipAmount.equals("30")){
+            else if(tipAmount.equalsIgnoreCase("30")){
                 WebElement button30TipVisible = waitForVisibility(button30Tip);
                 button30TipVisible.click();
             }
-            else if(tipAmount.equals("40")){
+            else if(tipAmount.equalsIgnoreCase("40")){
                 WebElement button40TipVisible = waitForVisibility(button40Tip);
                 button40TipVisible.click();
             }
-            else if(tipAmount.equals("50")){
+            else if(tipAmount.equalsIgnoreCase("50")){
                 WebElement button50TipVisible = waitForVisibility(button50Tip);
                 button50TipVisible.click();
             }
@@ -128,6 +127,10 @@ public class OrderSummaryPage extends AbstractPageClass{
     // function to select the tip
     public boolean applyCoupon() {
         try {
+            String couponFlag = configLoader.getProperty("COUPON");
+            if(couponFlag.equalsIgnoreCase("false")){
+                return true;
+            }
             WebElement buttonCouponVisible = waitForVisibility(buttonCoupon);
             buttonCouponVisible.click();
             WebElement buttonNavigationVisible = waitForVisibility(buttonNavigation);
@@ -146,31 +149,27 @@ public class OrderSummaryPage extends AbstractPageClass{
             buttonAccountAndPaymentMethodsVisible.click();
             String paymentMethod = configLoader.getProperty("PAYMENT_METHOD");
             String accountType = configLoader.getProperty("EMAIL_OR_PHONENUMBER");
-            if(paymentMethod.equals("Cash")){
+            if(paymentMethod.equalsIgnoreCase("Cash")){
                 WebElement buttonCashVisible = waitForVisibility(buttonCash);
                 buttonCashVisible.click();
             }
-            else if(paymentMethod.equals("FPS")){
+            else if(paymentMethod.equalsIgnoreCase("FPS")){
                 WebElement buttonFpsVisible = waitForVisibility(buttonFps);
                 buttonFpsVisible.click();
             }
-            else if(paymentMethod.equals("Pay by recipient")){
+            else if(paymentMethod.equalsIgnoreCase("Pay by recipient")){
                 WebElement buttonRecipientVisible = waitForVisibility(buttonRecipient);
                 buttonRecipientVisible.click();
             }
-            else if(paymentMethod.equals("Wallet")){
+            else if(paymentMethod.equalsIgnoreCase("Wallet")){
                 WebElement buttonWalletVisible = waitForVisibility(buttonWallet);
                 buttonWalletVisible.click();
-            } else if(paymentMethod.equals("Card")){
-                if(accountType.equals("qadmaster1@gogotech.hk")){
+            } else if(paymentMethod.equalsIgnoreCase("Card")){
+                if(accountType.equalsIgnoreCase("qadmaster1@gogotech.hk")){
                     WebElement buttonCashVisible = waitForVisibility(buttonCash);
                     buttonCashVisible.click();
                 }
             }
-
-
-            Thread.sleep(3000);
-
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -183,7 +182,6 @@ public class OrderSummaryPage extends AbstractPageClass{
         try {
             WebElement buttonPlaceOrderVisible = waitForVisibility(buttonPlaceOrder);
             buttonPlaceOrderVisible.click();
-            Thread.sleep(5000);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

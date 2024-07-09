@@ -71,7 +71,7 @@ public class AbstractPageClass {
 
     // Method to wait for visibility with scrolling
     public WebElement waitForVisibilityWithScroll(WebElement element) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         boolean canScrollMore = true;
 
         while (canScrollMore) {

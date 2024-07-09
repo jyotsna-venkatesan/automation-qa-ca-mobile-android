@@ -71,6 +71,10 @@ public class LandingPage extends AbstractPageClass{
     @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/btnPickOrder\"]")
     private WebElement buttonPickFirstOrder;
 
+    // confirm pick order
+    @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/btnStartDriving\"]")
+    private WebElement buttonPickUpConfirm;
+
     // begin driving
     @AndroidFindBy(xpath = "//android.widget.Button[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/btnStartDriving\"]")
     private WebElement buttonBeginDriving;
@@ -96,9 +100,7 @@ public class LandingPage extends AbstractPageClass{
     // close document expiry popup
     public boolean closeDocumentExpiryPopup() {
         try {
-            Thread.sleep(5000);
-            WebElement buttonCloseDocumentExpiryPopupVisible = waitForVisibility(buttonCloseDocumentExpiryPopup);
-            buttonCloseDocumentExpiryPopupVisible.click();
+            boolean clickbuttonDocmentExpiry = clickIfVisible(buttonCloseDocumentExpiryPopup, 3);
             return true;
         } catch (Exception e) {
             System.out.println("Error closing document expiry popup : " + e.getMessage());
@@ -149,7 +151,6 @@ public class LandingPage extends AbstractPageClass{
             buttonSortOrdersVisible.click();
             WebElement buttonSortLatestOrdersVisible = waitForVisibility(buttonSortLatestOrders);
             buttonSortLatestOrdersVisible.click();
-            Thread.sleep(5000);
             return true;
         } catch (Exception e) {
             System.out.println("Error clicking first order: " + e.getMessage());
@@ -204,8 +205,6 @@ public class LandingPage extends AbstractPageClass{
             WebElement buttonCompleteVisible = waitForVisibility(buttonCompleteOrder);
             buttonCompleteVisible.click();
             System.out.println("completed order");
-
-            Thread.sleep(5000);
 
             return true;
         } catch (Exception e) {
