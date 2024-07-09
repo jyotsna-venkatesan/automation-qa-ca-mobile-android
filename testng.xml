@@ -5,4 +5,4 @@
             <class name="org.CATests.pageObjects.android.tests.BaseTestClass"/>
         </classes>
     </test>
-</suite>
+ </suite>

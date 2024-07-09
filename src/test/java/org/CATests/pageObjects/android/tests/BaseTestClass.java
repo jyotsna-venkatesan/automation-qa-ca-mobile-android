@@ -83,6 +83,7 @@ public class BaseTestClass {
         openMobileApp();
 
         try {
+
             // Execute tests in sequence for the given testData
             System.out.println("Starting testHomePage");
             testHomePage(testData);
@@ -113,13 +114,16 @@ public class BaseTestClass {
             System.out.println("Completed testOrderSummaryPage");
 
             System.out.println("Starting testPlacedOrderPage");
-            Thread.sleep(5000);
             testPlacedOrderPage(testData);  // Ensure this method is called
             System.out.println("Completed testPlacedOrderPage");
 
-            // Check the Cancel_Flag before running DA tests
+            // Reload properties to ensure the latest value is read
+            configLoader.reload();
             String cancelFlag = configLoader.getProperty("CANCEL_FLAG");
-            if (cancelFlag.equals("false")) {
+            System.out.println("The cancel flag is " + cancelFlag);
+
+            // Check the Cancel_Flag before running DA tests
+            if (cancelFlag.equalsIgnoreCase("false")) {
                 // Run tests from org.DATests.pageObjects.android.tests.BaseTestClass
                 DABaseTestClass daBaseTest = new DABaseTestClass(driver, extent, test);
                 daBaseTest.runTestsWithOrderID(GlobalState.globalOrderID);
@@ -145,6 +149,7 @@ public class BaseTestClass {
         cap.setCapability("appium:platformName", "Android");
         cap.setCapability("appium:platformVersion", "14");
         cap.setCapability("appium:automationName", "uiAutomator2");
+        cap.setCapability("appium:newCommandTimeout", 600); // Set timeout to 600 seconds (10 minutes)
         cap.setCapability("appium:appPackage", "hk.gogovan.GoGoVanClient2.staging");
         cap.setCapability("appium:appActivity", "hk.gogovan.clientapp.RootActivity");
 

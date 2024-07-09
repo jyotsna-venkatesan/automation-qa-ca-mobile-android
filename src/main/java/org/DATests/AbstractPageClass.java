@@ -5,6 +5,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.CATests.pageObjects.android.JavaScriptHelper;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
@@ -44,5 +45,25 @@ public class AbstractPageClass {
     public WebElement waitForVisibility(WebElement element) {
         return wait.ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.visibilityOf(element));
+    }
+
+    // Method to check if an element is visible and click it if it is
+    public boolean clickIfVisible(WebElement element, int timeoutInSeconds) {
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutInSeconds));
+            WebElement visibleElement = wait.until(ExpectedConditions.visibilityOf(element));
+            if (visibleElement != null) {
+                visibleElement.click();
+                System.out.println("Clicked on the element: " + element.toString());
+                return true;
+            }
+        } catch (NoSuchElementException e) {
+            // Handle the case where the element is not found
+            System.err.println("Element not found: " + e.getMessage());
+        } catch (Exception e) {
+            // Handle any other exceptions
+            System.err.println("Error while trying to click the element: " + e.getMessage());
+        }
+        return false;
     }
 }

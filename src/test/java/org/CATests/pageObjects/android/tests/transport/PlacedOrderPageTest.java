@@ -51,7 +51,7 @@ public class PlacedOrderPageTest {
         // cancel order if needed
         boolean isOrderCanceled = placedOrderPage.cancelOrder();
         assertTrue(isOrderCanceled, "Failed to cancel order.");
-        System.out.println("Canceled the order");
+        System.out.println("Cancel the order if needed: Success");
 
 
     }

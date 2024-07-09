@@ -37,8 +37,8 @@ public class TimeAndVehiclePageTest {
         assertTrue(isSelectedTimeClicked, "Failed to click the selected time button.");
 
         // click on the ok button of pick-up time
-        boolean isOKClicked = timeAndVehiclePage.clickOK();
-        assertTrue(isOKClicked, "Failed to click the ok button for the pick-up page.");
+        boolean isOKClicked = timeAndVehiclePage.clickOKDate();
+        assertTrue(isOKClicked, "Failed to click the ok button for the date.");
         System.out.println("Select time and date: Success");
 
         // click on the hourly rental button
@@ -51,7 +51,7 @@ public class TimeAndVehiclePageTest {
         assertTrue(isSelectedHourlyRentalTimeClicked, "Failed to click the selected hourly rental time button.");
 
         // click on the ok button of pick-up time
-        boolean isOKClicked2 = timeAndVehiclePage.clickOK();
+        boolean isOKClicked2 = timeAndVehiclePage.clickOKRental();
         assertTrue(isOKClicked2, "Failed to click the ok button for the hourly rental page.");
         System.out.println("Select hourly rental time: Success");
 

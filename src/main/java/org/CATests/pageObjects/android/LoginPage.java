@@ -85,7 +85,6 @@ public class LoginPage extends AbstractPageClass{
     public boolean enterUsername() {
         try {
             WebElement buttonInputUsernameVisible = waitForVisibility(buttonInputUsername);
-            buttonInputUsernameVisible.click();
             String userName = configLoader.getProperty("EMAIL_OR_PHONENUMBER");
             buttonInputUsername.sendKeys(userName);
             // press the enter button
@@ -114,7 +113,6 @@ public class LoginPage extends AbstractPageClass{
     public boolean enterPassword() {
         try {
             WebElement buttonInputPasswordVisible = waitForVisibility(buttonInputPassword);
-            buttonInputPasswordVisible.click();
             String userPassword = configLoader.getProperty("PASSWORD");
             buttonInputPassword.sendKeys(userPassword);
             // press the enter button

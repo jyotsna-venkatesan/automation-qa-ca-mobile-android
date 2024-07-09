@@ -153,15 +153,14 @@ public class OrderDetailsPage extends AbstractPageClass {
     public boolean selectCargoCompensation() {
         try {
             String cargoOption = configLoader.getProperty("CARGO_COMPENSATION");
-            if(cargoOption.equals("Included")){
-                WebElement buttonIncludeCargoCompensationVisible = waitForVisibility(buttonIncludeCargoCompensation);
-                buttonIncludeCargoCompensationVisible.click();
+            if(cargoOption.equalsIgnoreCase("Included")){
+                return true;
             }
-            else if(cargoOption.equals("Basic")){
+            else if(cargoOption.equalsIgnoreCase("Basic")){
                 WebElement buttonBasicCargoCompensationVisible = waitForVisibility(buttonBasicCargoCompensation);
                 buttonBasicCargoCompensationVisible.click();
             }
-            else if(cargoOption.equals("Standard")){
+            else if(cargoOption.equalsIgnoreCase("Standard")){
                 WebElement buttonStandardCargoCompensationVisible = waitForVisibility(buttonStandardCargoCompensation);
                 buttonStandardCargoCompensationVisible.click();
             }
@@ -179,6 +178,9 @@ public class OrderDetailsPage extends AbstractPageClass {
         try {
             String noOfPassengers = configLoader.getProperty("NUMBER_OF_PASSENGERS");
             int passengerCount = Integer.parseInt(noOfPassengers);
+            if(passengerCount == 2){
+                return true;
+            }
             if (passengerCount != 1){
                 for (int i = 0; i < (passengerCount-2); i++){
                     WebElement buttonIncreasePassengersVisible = waitForVisibility(buttonIncreasePassengers);
@@ -235,22 +237,22 @@ public class OrderDetailsPage extends AbstractPageClass {
             String tallerThan2 = configLoader.getProperty("GOODS_TALLER_THAN_2_FT");
             String petFriendly = configLoader.getProperty("PET_FRIENDLY");
             String englishSpeaking = configLoader.getProperty("ENGLISH_SPEAKING");
-            if (longerThan6.equals("true")){
+            if (longerThan6.equalsIgnoreCase("true")){
                 WebElement buttonLonger6ftVisible = waitForVisibility(buttonLonger6ft);
                 buttonLonger6ftVisible.click();
                 System.out.println("Clicked on buttonLonger6ftVisible");
-                if(tallerThan2.equals("true")){
+                if(tallerThan2.equalsIgnoreCase("true")){
                     WebElement buttonTaller2ftVisible = waitForVisibility(buttonTaller2ft);
                     buttonTaller2ftVisible.click();
                     System.out.println("Clicked on buttonTaller2ftVisible");
                 }
             }
-            if (petFriendly.equals("true")){
+            if (petFriendly.equalsIgnoreCase("true")){
                 WebElement buttonPetFriendlyVisible = waitForVisibility(buttonPetFriendly);
                 buttonPetFriendlyVisible.click();
                 System.out.println("Clicked on buttonPetFriendlyVisible");
             }
-            if (englishSpeaking.equals("true")){
+            if (englishSpeaking.equalsIgnoreCase("true")){
                 WebElement buttonEnglishSpeakingVisible = waitForVisibility(buttonEnglishSpeaking);
                 buttonEnglishSpeakingVisible.click();
                 System.out.println("Clicked on buttonEnglishSpeakingVisible");
@@ -266,7 +268,7 @@ public class OrderDetailsPage extends AbstractPageClass {
         try {
             System.out.println("Entered the tunnel preference function");
             String tunnelFlag = configLoader.getProperty("TUNNEL_PREFERENCE");
-            if (tunnelFlag.equals("false")) {
+            if (tunnelFlag.equalsIgnoreCase("false")) {
                 return true;
             }
             System.out.println("it is not false");
@@ -332,12 +334,15 @@ public class OrderDetailsPage extends AbstractPageClass {
         try {
             String moveDoorToDoor = configLoader.getProperty("MOVE_DOOR_TO_DOOR");
             String transportWaste = configLoader.getProperty("TRANSPORT_WASTE");
-            if (moveDoorToDoor.equals("true")){
+            if (moveDoorToDoor.equalsIgnoreCase("false") && transportWaste.equalsIgnoreCase("false")) {
+                return true;
+            }
+            if (moveDoorToDoor.equalsIgnoreCase("true")){
                 WebElement moveDoorToDoorVisible = waitForVisibilityWithScroll(buttonMoveDoorToDoor);
                 moveDoorToDoorVisible.click();
                 System.out.println("Clicked on buttonMoveDoorToDoor");
             }
-            if (transportWaste.equals("true")){
+            if (transportWaste.equalsIgnoreCase("true")){
                 WebElement transportWasteVisible = waitForVisibilityWithScroll(buttonTransportWaste);
                 transportWasteVisible.click();
                 System.out.println("Clicked on buttonTransportWaste");
@@ -358,29 +363,18 @@ public class OrderDetailsPage extends AbstractPageClass {
             System.out.println("clicked Add contact information");
 
             WebElement buttonAddContactInfoNameVisible = waitForVisibility(buttonAddContactInfoName);
-            buttonAddContactInfoNameVisible.click();
             String userName = configLoader.getProperty("USER_NAME");
             buttonAddContactInfoName.clear();
             buttonAddContactInfoName.sendKeys(userName);
-            // press the enter button
-            Actions actions = new Actions(driver);
-            actions.sendKeys(buttonAddContactInfoName, Keys.RETURN).perform();
             WebElement buttonAddContactInfoNumberVisible = waitForVisibility(buttonAddContactInfoNumber);
-            buttonAddContactInfoNumberVisible.click();
             String userNumber = configLoader.getProperty("PHONE_NUMBER");
             buttonAddContactInfoNumber.clear();
             buttonAddContactInfoNumber.sendKeys(userNumber);
-            // press the enter button
-            Actions actions2 = new Actions(driver);
-            actions2.sendKeys(buttonAddContactInfoNumber, Keys.RETURN).perform();
             String extensionFlag = configLoader.getProperty("EXTENSION_FLAG");
-            if (extensionFlag.equals("true")){
+            if (extensionFlag.equalsIgnoreCase("true")){
                 String userExtension = configLoader.getProperty("EXTENSION");
                 buttonAddContactInfoExtension.clear();
                 buttonAddContactInfoExtension.sendKeys(userExtension);
-                // press the enter button
-                Actions actions3 = new Actions(driver);
-                actions3.sendKeys(buttonAddContactInfoExtension, Keys.RETURN).perform();
             }
             WebElement buttonAddContactInfoSaveVisible = waitForVisibility(buttonAddContactInfoSave);
             buttonAddContactInfoSaveVisible.click();
