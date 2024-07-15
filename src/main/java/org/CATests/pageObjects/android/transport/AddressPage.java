@@ -25,11 +25,11 @@ public class AddressPage extends AbstractPageClass {
     private WebElement buttonInput;
 
     // the first option to show up
-    @AndroidFindBy(xpath = "//android.widget.LinearLayout[@content-desc=\"route_item_1\"]/android.widget.LinearLayout")
+    @AndroidFindBy(xpath = "//android.widget.LinearLayout[@content-desc=\"route_item_1\"]")
     private WebElement buttonFirstOption;
 
     // first option to show up if already used this location before
-    @AndroidFindBy(xpath = "(//android.widget.LinearLayout[@content-desc=\"route_item_2\"])[2]")
+    @AndroidFindBy(xpath = "(//android.widget.LinearLayout[@content-desc=\"route_item_2\"])[1]")
     private WebElement buttonFirstOptionUsed;
 
     // the done button for where from

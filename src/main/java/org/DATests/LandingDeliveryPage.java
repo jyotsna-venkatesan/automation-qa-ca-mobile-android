@@ -1,5 +1,6 @@
 package org.DATests;
 
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
@@ -8,6 +9,8 @@ import io.appium.java_client.touch.offset.PointOption;
 import org.CATests.utils.ConfigLoader;
 import org.openqa.selenium.By;
 import io.appium.java_client.TouchAction;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.PointerInput;
 import org.openqa.selenium.interactions.Sequence;
@@ -40,7 +43,7 @@ public class LandingDeliveryPage extends AbstractPageClass{
 
     // button to click on first order
 
-    @AndroidFindBy(xpath = "//androidx.cardview.widget.CardView/android.widget.FrameLayout/android.view.ViewGroup")
+    @AndroidFindBy(xpath = "//androidx.cardview.widget.CardView/android.widget.FrameLayout")
     private WebElement buttonFirstOrder;
     @AndroidFindBy(xpath = "//androidx.recyclerview.widget.RecyclerView[@resource-id=\"hk.gogovan.GoGoDriver.staging:id/recyclerView\"]")
     private WebElement buttonOrderCards;
@@ -103,7 +106,7 @@ public class LandingDeliveryPage extends AbstractPageClass{
     private WebElement buttonCompleteOrderFinal;
 
     // navigate back button
-    @AndroidFindBy(xpath = "//android.widget.Button[@text=\"Complete Order\"]")
+    @AndroidFindBy(xpath = "//android.widget.ImageButton[@content-desc=\"Navigate up\"]")
     private WebElement buttonNavigateBack;
 
 
@@ -134,58 +137,59 @@ public class LandingDeliveryPage extends AbstractPageClass{
             return false;
         }
     }
+
     public boolean clickFirstOrder2() {
         try {
-            System.out.println("Locating RecyclerView");
-            By recyclerViewLocator = By.xpath("//androidx.recyclerview.widget.RecyclerView[@resource-id='hk.gogovan.GoGoDriver.staging:id/recyclerView']");
-            WebElement recyclerView = wait.until(ExpectedConditions.visibilityOfElementLocated(recyclerViewLocator));
-
-            System.out.println("Locating cards within the RecyclerView");
-            List<WebElement> cards = recyclerView.findElements(By.xpath("./android.widget.RelativeLayout"));
-            System.out.println("Number of cards found: " + cards.size());
-
-            for (WebElement card : cards) {
-                System.out.println("Clicking on a card");
-                card.click();
-
-                // Adding a short sleep to wait for the next page to load
-                Thread.sleep(5000);
-
-                // Construct the XPath to match the order ID starting with '#' and ending with the last three digits of globalOrderID
-                String lastThreeDigits = globalOrderID.substring(globalOrderID.length() - 3);
-                String orderIdPattern = String.format("#%s", lastThreeDigits);
-                String orderIdXpath = String.format("//android.widget.TextView[contains(@text, '%s')]", orderIdPattern);
-                By orderIdLocator = By.xpath(orderIdXpath);
-
-                System.out.println("Waiting for the order ID element to be visible using XPath: " + orderIdXpath);
-                WebElement orderIdElement = wait.until(ExpectedConditions.visibilityOfElementLocated(orderIdLocator));
-
-                if (orderIdElement != null) {
-                    String orderIdText = orderIdElement.getText();
-                    System.out.println("Order ID element found with text: " + orderIdText);
-                    if (orderIdText.startsWith("#") && orderIdText.endsWith(lastThreeDigits)) {
-                        System.out.println("Order ID matches the pattern");
-                        return true; // Order ID matches the pattern
-                    } else {
-                        System.out.println("Order ID does not match the pattern, navigating back");
-                        // Go back to the previous screen
-                        buttonNavigateBack = waitForVisibility(buttonNavigateBack);
-                        buttonNavigateBack.click();
-
-                        // Re-locate the RecyclerView after navigating back
-                        System.out.println("Re-locating RecyclerView after navigating back");
-                        recyclerView = wait.until(ExpectedConditions.visibilityOfElementLocated(recyclerViewLocator));
-                        cards = recyclerView.findElements(By.xpath("./android.widget.RelativeLayout"));
-                    }
-                } else {
-                    System.out.println("Order ID element not found");
-                    return false;
+            int cardIndex = 1;
+            while (true) {
+                // Construct XPath for the card element
+                String cardXpath = "//androidx.recyclerview.widget.RecyclerView[@resource-id='hk.gogovan.GoGoDriver.staging:id/recyclerView']/android.widget.RelativeLayout";
+                if (cardIndex > 1) {
+                    cardXpath += String.format("[%d]", cardIndex);
                 }
+                By cardLocator = By.xpath(cardXpath);
+
+                try {
+                    // Attempt to find the card element
+                    WebElement cardElement = driver.findElement(cardLocator);
+                    if (cardElement != null) {
+                        cardElement.click();
+
+                        // Construct the XPath to match the order ID starting with '#' and ending with the last three digits of globalOrderID
+                        String lastThreeDigits = globalOrderID.substring(globalOrderID.length() - 3);
+                        String orderIdPattern = String.format("#***%s", lastThreeDigits);
+                        String orderIdXpath = String.format("//android.widget.TextView[@text='%s']", orderIdPattern);
+                        By orderIdLocator = By.xpath(orderIdXpath);
+
+                        try {
+                            // Locate the order ID element
+                            WebElement orderIdElement = wait.until(ExpectedConditions.visibilityOfElementLocated(orderIdLocator));
+                            if (orderIdElement != null) {
+                                // Using the clickIfVisible method to click the order ID element if it is visible
+                                boolean isOrderIdClicked = clickIfVisible(orderIdElement, 3);
+                                if (isOrderIdClicked) {
+                                    return true;
+                                } else {
+                                    System.out.println("Order ID does not match the pattern, navigating back");
+                                    buttonNavigateBack = waitForVisibility(buttonNavigateBack);
+                                    buttonNavigateBack.click();
+                                }
+                            }
+                        } catch (TimeoutException e) {
+                            System.out.println("Order ID not found for card " + cardIndex + ", moving to next card.");
+                            buttonNavigateBack = waitForVisibility(buttonNavigateBack);
+                            buttonNavigateBack.click();
+                        }
+                    }
+                } catch (NoSuchElementException e) {
+                    // If the card element is not found, scroll and try again
+                    System.out.println("Scrolling down to find more cards");
+                    driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector().scrollable(true)).scrollForward();"));
+                    Thread.sleep(2000); // Wait for scrolling to complete
+                }
+
+                cardIndex++;
             }
-
-            System.out.println("No matching order ID found");
-            return false;
-
         } catch (Exception e) {
             System.out.println("Error clicking first order: " + e.getMessage());
             e.printStackTrace();

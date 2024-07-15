@@ -26,7 +26,7 @@ public class LandingDeliveryPageTest {
             System.out.println("Switch to delivery: Success");
 
             // Click first order
-            boolean isFirstOrderClicked = landingdPage.clickFirstOrder();
+            boolean isFirstOrderClicked = landingdPage.clickFirstOrder2();
             assertTrue(isFirstOrderClicked, "Failed to click first order.");
             System.out.println("Click first order: Success");
 
