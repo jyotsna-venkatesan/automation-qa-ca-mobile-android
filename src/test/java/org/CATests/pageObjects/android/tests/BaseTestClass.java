@@ -1,5 +1,6 @@
 package org.CATests.pageObjects.android.tests;
 
+import com.aventstack.extentreports.testng.listener.ExtentITestListenerAdapter;
 import io.appium.java_client.android.AndroidDriver;
 import org.CATests.pageObjects.android.tests.delivery.*;
 import org.CATests.pageObjects.android.tests.transport.*;
@@ -12,6 +13,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import com.aventstack.extentreports.ExtentReports;
@@ -21,7 +23,7 @@ import com.aventstack.extentreports.ExtentTest;
 import org.testng.annotations.*;
 
 
-
+@Listeners(ExtentITestListenerAdapter.class)
 public class BaseTestClass {
 
     private static final Logger logger = LogManager.getLogger(BaseTestClass.class);
@@ -57,6 +59,12 @@ public class BaseTestClass {
         return data;
     }
 
+    static {
+        System.setProperty("extent.reporter.spark.start", "true");
+        System.setProperty("extent.reporter.spark.config", "src/main/resources/html-config.xml");
+        System.setProperty("extent.reporter.spark.out", "src/main/java/ExtentReports/" + LocalDateTime.now() + ".html");
+    }
+
     @BeforeMethod
     @Parameters("rowNumber")
     public void setup(@Optional("1") int rowNumber) throws MalformedURLException {
@@ -67,8 +75,8 @@ public class BaseTestClass {
         configLoader = new ConfigLoader();
         configLoader.reload();
 
-        // Create a new test node in the report
-        test = extent.createTest("Test Case: " + rowNumber);
+        // Initialize ExtentTest instance
+        test = extent.createTest("Test Name: " + testData.get("testName"));
     }
 
     private void updateConfig(Map<String, String> testData) {
@@ -215,7 +223,6 @@ public class BaseTestClass {
         cap.setCapability("appium:automationName", "uiAutomator2");
         cap.setCapability("appium:appPackage", "hk.gogovan.GoGoVanClient2.staging");
         cap.setCapability("appium:appActivity", "hk.gogovan.clientapp.RootActivity");
-
 
         URL url = new URL("http://127.0.0.1:4723/");
         driver = new AndroidDriver(url, cap);

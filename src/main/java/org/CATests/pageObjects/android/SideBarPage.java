@@ -26,6 +26,7 @@ public class SideBarPage extends AbstractPageClass{
     private WebElement buttonDeny;
 
     // functions
+
     // click deny access to device's location
     public boolean clickDeny() {
         try {

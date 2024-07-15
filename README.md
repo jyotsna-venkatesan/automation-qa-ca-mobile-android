@@ -11,7 +11,7 @@
 1. Opens the 'Stag-GoGoX' application on Android 
 2. Performs tests from an excel file "testdata.xlsx"
    1. Logs into an account
-   2. Places a transport order
+   2. Places a transport/ delivery order
    3. Opens the driver app
    4. Picks up the order and completes it
    5. Cancels order from the CA if wanted
@@ -24,14 +24,14 @@
      - CATests: stores all the files relating to the customer app
           - pageObjects.android: stores the files that contain the functions and buttons for each page
             - transport: stores the files for transport
-            - delivery (to be made): stores the files related to delivery
+            - delivery: stores the files related to delivery
           - utils: stores the ConfigLoader and all the files related to data loading to input the values such as addresses, etc 
           - resources: has a file called config.properties that stores the values that ConfigLoader uses and also has the excel file with the variables
      - DATests: stores all the files relating to the driver app
    -  test: stores everything related to testing
      - org.CATests.pageObjects.android.tests: stores all the customer app test files
        - transport: stores all the test files related to transport
-       - delivery (to be made): stores all the test files related to delivery
+       - delivery: stores all the test files related to delivery
      - org.DATests.pageObjects.android.tests: stores all the driver app test files
 - others: BaseTestClass (AbstractPageClass) and HomePageTest (HomePage) these files store the main and test files for the common pages
 
@@ -41,5 +41,3 @@
 3. Make the code automatically update the current date
 4. Add functionality to send note to driver
 5. Implement the "apply coupon" functionality
-6. Make the implementation faster
-
